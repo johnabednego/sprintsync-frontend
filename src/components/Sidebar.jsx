@@ -1,15 +1,28 @@
 // src/components/Sidebar.jsx
 import { NavLink } from 'react-router-dom';
-import { FaTachometerAlt, FaTasks, FaProjectDiagram, FaChartBar } from 'react-icons/fa';
-
-const nav = [
-  { to: '/',        label: 'Dashboard', icon: <FaTachometerAlt /> },
-  { to: '/tasks',   label: 'Tasks',     icon: <FaTasks /> },
-  { to: '/projects',label: 'Projects',  icon: <FaProjectDiagram /> },
-  { to: '/analytics',label: 'Analytics',icon: <FaChartBar /> },
-];
+import {
+  FaTachometerAlt,
+  FaTasks,
+  FaProjectDiagram,
+  FaChartBar,
+  FaUsers,
+  FaUser
+} from 'react-icons/fa';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Sidebar({ isOpen, onClose }) {
+  const { user } = useAuth();
+
+  const nav = [
+    { to: '/',         label: 'Dashboard', icon: <FaTachometerAlt /> },
+    { to: '/tasks',    label: 'Tasks',     icon: <FaTasks /> },
+    { to: '/projects', label: 'Projects',  icon: <FaProjectDiagram /> },
+    { to: '/analytics',label: 'Analytics', icon: <FaChartBar /> },
+    // { to: '/profile',  label: 'Profile',   icon: <FaUser /> }, we can show it if we want to, but it is already showing under the drop down
+    // only show to admins:
+    ...(user.isAdmin ? [{ to: '/users', label: 'User Management', icon: <FaUsers /> }] : [])
+  ];
+
   return (
     <>
       {/* Backdrop on mobile */}
@@ -20,10 +33,10 @@ export default function Sidebar({ isOpen, onClose }) {
         />
       )}
 
-      {/* Always fixed; translate on mobile only */}
+      {/* Sidebar panel */}
       <aside
         className={`
-          fixed top-16 left-0 bottom-0 w-64 bg-white dark:bg-gray-900 overflow-auto 
+          fixed top-16 left-0 bottom-0 w-64 bg-white dark:bg-gray-900 overflow-auto
           transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}
           transition-transform duration-200 ease-in-out
           sm:translate-x-0

@@ -100,7 +100,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{
-      user, stage, setStage,
+      user, setUser, stage, setStage,
       login, signup, verifyEmail,
       forgotPassword, resetPassword,
       setOtpEmail, setOtpPurpose, resendOtp,

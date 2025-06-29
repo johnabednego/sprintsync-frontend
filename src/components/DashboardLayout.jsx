@@ -1,8 +1,8 @@
-// src/components/DashboardLayout.jsx
 import { useState } from 'react';
-import { useAuth }   from '../contexts/AuthContext';
-import Sidebar       from './Sidebar';
-import Navbar        from './Navbar';
+import { useAuth } from '../contexts/AuthContext';
+import Sidebar from './Sidebar';
+import Navbar from './Navbar';
+import AppRoutes from '../AppRoutes';
 
 export default function DashboardLayout() {
   const { user } = useAuth();
@@ -13,9 +13,9 @@ export default function DashboardLayout() {
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
-      <Sidebar 
-        isOpen={sidebarOpen} 
-        onClose={() => setSidebarOpen(false)} 
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
 
       {/* Main area */}
@@ -30,6 +30,8 @@ export default function DashboardLayout() {
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">
             Welcome back, {user.firstName} {user.lastName}!
           </h2>
+          {/* Routed pages */}
+          <AppRoutes />
         </main>
       </div>
     </div>
