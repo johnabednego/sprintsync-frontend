@@ -1,4 +1,3 @@
-// src/pages/Profile.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import baseUrl from '../components/baseUrl';

@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import baseUrl from '../components/baseUrl';
 import { toast } from 'react-toastify';
 
 export default function UserManagement() {
-  const [users, setUsers]         = useState([]);
-  const [pageCount, setPageCount] = useState(0);
+  const [users, setUsers]             = useState([]);
+  const [pageCount, setPageCount]     = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-  const [editUser, setEditUser]   = useState(null);
-  const [form, setForm]           = useState({ firstName: '', lastName: '', isAdmin: false });
+  const [editUser, setEditUser]       = useState(null);
+  const [form, setForm]               = useState({ firstName: '', lastName: '', isAdmin: false });
   const limit = 10;
 
-  // Fetch page of users
+  // Fetch users
   const fetchUsers = async (selected = 0) => {
     try {
       const page = selected + 1;
@@ -31,35 +31,26 @@ export default function UserManagement() {
 
   useEffect(() => { fetchUsers(); }, []);
 
-  // Pagination click
+  // Pagination
   const handlePageClick = ({ selected }) => {
     fetchUsers(selected);
   };
 
-  // Open edit modal
+  // Edit modal controls
   const openEdit = u => {
     setEditUser(u);
     setForm({ firstName: u.firstName, lastName: u.lastName, isAdmin: u.isAdmin });
   };
-
-  // Form changes
   const handleFormChange = e => {
     const { name, value, type, checked } = e.target;
-    setForm(f => ({
-      ...f,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+    setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
   };
-
-  // Save edits via PATCH /users/:id
   const saveEdit = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(
-        `${baseUrl}/users/${editUser._id}`,
-        form,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.patch(`${baseUrl}/users/${editUser._id}`, form, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       toast.success('User updated');
       setEditUser(null);
       fetchUsers(currentPage);
@@ -67,16 +58,13 @@ export default function UserManagement() {
       toast.error('Update failed');
     }
   };
-
-  // Delete user
   const deleteUser = async id => {
     if (!confirm('Delete this user?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(
-        `${baseUrl}/users/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.delete(`${baseUrl}/users/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       toast.success('User deleted');
       fetchUsers(currentPage);
     } catch {
@@ -85,56 +73,92 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-6 rounded shadow space-y-4">
+    <div className="max-w-5xl mx-auto p-4 space-y-6">
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
         User Management
       </h2>
 
-      {/* Users Table */}
-      <table className="w-full table-auto text-left mb-4">
-        <thead>
-          <tr className="bg-gray-100 dark:bg-gray-700">
-            <th className="px-4 py-2">Name</th>
-            <th className="px-4 py-2">Email</th>
-            <th className="px-4 py-2">Admin?</th>
-            <th className="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(u => (
-            <tr key={u._id} className="border-b dark:border-gray-600">
-              <td className="px-4 py-2 dark:text-gray-100">
-                {u.firstName} {u.lastName}
-              </td>
-              <td className="px-4 py-2 dark:text-gray-100">{u.email}</td>
-              <td className="px-4 py-2 dark:text-gray-100">{u.isAdmin ? 'Yes' : 'No'}</td>
-              <td className="px-4 py-2 space-x-2">
-                <button
-                  onClick={() => openEdit(u)}
-                  className="px-2 py-1 bg-yellow-500 text-white rounded"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => deleteUser(u._id)}
-                  className="px-2 py-1 bg-red-600 text-white rounded"
-                >
-                  Delete
-                </button>
-              </td>
+      {/* Table view on md+ */}
+      <div className="hidden md:block overflow-auto bg-white dark:bg-gray-800 rounded shadow">
+        <table className="w-full table-auto text-left">
+          <thead>
+            <tr className="bg-gray-100 dark:bg-gray-700">
+              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Email</th>
+              <th className="px-4 py-2">Admin?</th>
+              <th className="px-4 py-2">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map(u => (
+              <tr key={u._id} className="border-b dark:border-gray-600">
+                <td className="px-4 py-2 dark:text-gray-100">
+                  {u.firstName} {u.lastName}
+                </td>
+                <td className="px-4 py-2 dark:text-gray-100">{u.email}</td>
+                <td className="px-4 py-2 dark:text-gray-100">{u.isAdmin ? 'Yes' : 'No'}</td>
+                <td className="px-4 py-2 space-x-2">
+                  <button
+                    onClick={() => openEdit(u)}
+                    className="px-2 py-1 bg-yellow-500 text-white rounded"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteUser(u._id)}
+                    className="px-2 py-1 bg-red-600 text-white rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Card view on small */}
+      <div className="md:hidden space-y-4">
+        {users.map(u => (
+          <div
+            key={u._id}
+            className="bg-white dark:bg-gray-800 p-4 rounded shadow flex flex-col space-y-2"
+          >
+            <div className="flex justify-between">
+              <h3 className="font-semibold dark:text-gray-100">
+                {u.firstName} {u.lastName}
+              </h3>
+              <span className="text-sm dark:text-gray-300">
+                {u.isAdmin ? 'Admin' : 'User'}
+              </span>
+            </div>
+            <p className="text-sm dark:text-gray-200">{u.email}</p>
+            <div className="flex space-x-2 mt-2">
+              <button
+                onClick={() => openEdit(u)}
+                className="flex-1 px-2 py-1 bg-yellow-500 text-white rounded text-sm"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => deleteUser(u._id)}
+                className="flex-1 px-2 py-1 bg-red-600 text-white rounded text-sm"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* Pagination */}
       <ReactPaginate
-        previousLabel={'← Previous'}
+        previousLabel={'← Prev'}
         nextLabel={'Next →'}
         pageCount={pageCount}
         onPageChange={handlePageClick}
         forcePage={currentPage}
-        containerClassName="flex space-x-1 justify-center"
+        containerClassName="flex flex-wrap justify-center gap-2"
         pageClassName="px-3 py-1 border rounded dark:border-gray-600"
         activeClassName="bg-indigo-600 text-white"
         previousClassName="px-3 py-1"
@@ -145,12 +169,12 @@ export default function UserManagement() {
       {/* Edit Modal */}
       {editUser && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div 
+          <div
             className="absolute inset-0 bg-black/50"
             onClick={() => setEditUser(null)}
           />
-          <div className="relative bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-full max-w-md">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+          <div className="relative bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-full max-w-sm mx-2">
+            <h3 className="text-xl font-semibold mb-4 dark:text-gray-100">
               Edit User
             </h3>
             <div className="space-y-4">
@@ -176,16 +200,16 @@ export default function UserManagement() {
                   onChange={handleFormChange}
                   className="form-checkbox"
                 />
-                <span className="text-gray-700 dark:text-gray-300">Admin?</span>
+                <span className="dark:text-gray-300">Admin?</span>
               </label>
               <div className="flex justify-end space-x-2">
-                <button 
+                <button
                   onClick={() => setEditUser(null)}
                   className="px-4 py-2 bg-gray-300 dark:bg-gray-600 rounded"
                 >
                   Cancel
                 </button>
-                <button 
+                <button
                   onClick={saveEdit}
                   className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded"
                 >
