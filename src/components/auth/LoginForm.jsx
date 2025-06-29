@@ -57,7 +57,7 @@ export default function LoginForm() {
           className="text-indigo-600 hover:underline dark:text-indigo-400"
           onClick={() => setStage('forgot')}
         >
-          Forgot?
+          Forgot Password?
         </button>
         <button
           type="button"
