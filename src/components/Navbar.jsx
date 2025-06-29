@@ -2,6 +2,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { FaMoon, FaSun, FaUserCircle, FaBars } from 'react-icons/fa';
 import { useEffect, useRef, useState } from 'react';
+import logo from '../assets/logo.svg'
 
 export default function Navbar({ onToggleSidebar }) {
   const { user, logout } = useAuth();
@@ -32,7 +33,10 @@ export default function Navbar({ onToggleSidebar }) {
         >
           <FaBars />
         </button>
+        <div className='flex gap-1'>
+        <img src={logo} alt="" width={25} height={25} />
         <h1 className="text-xl font-bold">SprintSync</h1>
+        </div>
       </div>
 
       <div className="flex items-center space-x-4">
