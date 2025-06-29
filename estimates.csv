@@ -5,9 +5,10 @@ Configure ESLint, and Prettier,0.4, 0.2
 Set up Tailwind CSS (with custom gradient theme) or Styled Components,0.6,0.2
 
 # --- Authentication & Layout ---
-Implement JWT login flow (login page + token storage/hooks),1.0,
-Build global layout with header/nav, responsive drawer/sidebar,0.8,
-Create ProtectedRoute component & auth context,0.5,
+Implement JWT login flow (login page + token storage/hooks),1.0, 0.7
+Build global layout with header/nav, responsive drawer/sidebar,0.8,1.0
+Create ProtectedRoute component & auth context,0.5,0.2
+Dark Mode,0.5,0.2
 
 # --- Task List & Details View ---
 Fetch & display task list with inline status toggles (pill buttons with gradients),1.2,
