@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { toast }   from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export default function LoginForm() {
   const { login, setStage, setOtpPurpose } = useAuth();
-  const [email, setEmail]       = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async e => {
@@ -14,7 +14,7 @@ export default function LoginForm() {
       toast.success('Logged in successfully!');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
-       if(err.response?.data?.message === "Email not verified"){
+      if (err.response?.data?.message === "Email not verified") {
         setOtpPurpose('emailVerification')
         setStage('verifyEmail')
       }
@@ -22,7 +22,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form 
+    <form
       onSubmit={handleSubmit}
       className="bg-white p-6 sm:p-8 rounded-lg shadow-lg space-y-4"
     >
