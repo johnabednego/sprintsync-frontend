@@ -182,7 +182,7 @@ export default function Projects() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 space-y-6">
+    <div className="max-w-6xl mx-auto p-4 sm:p-0 lg:p-4 space-y-6">
       {/* Header & New */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h2 className="text-2xl font-semibold dark:text-gray-100">Projects</h2>

@@ -27,8 +27,8 @@ export default function DashboardLayout() {
           content shifts right by that width. Also include pt-16 to clear the fixed navbar.
         */}
         <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-800 pt-20 p-4 ml-0 sm:ml-52 lg:ml-64">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">
-            Welcome back, {user.firstName} {user.lastName}!
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+            Welcome back, {user.firstName}!
           </h2>
           {/* Routed pages */}
           <AppRoutes />
