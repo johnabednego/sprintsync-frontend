@@ -18,7 +18,6 @@ export default function Sidebar({ isOpen, onClose }) {
     { to: '/tasks',    label: 'Tasks',     icon: <FaTasks /> },
     { to: '/projects', label: 'Projects',  icon: <FaProjectDiagram /> },
     { to: '/analytics',label: 'Analytics', icon: <FaChartBar /> },
-    // { to: '/profile',  label: 'Profile',   icon: <FaUser /> }, we can show it if we want to, but it is already showing under the drop down
     // only show to admins:
     ...(user.isAdmin ? [{ to: '/users', label: 'User Management', icon: <FaUsers /> }] : [])
   ];
@@ -36,7 +35,7 @@ export default function Sidebar({ isOpen, onClose }) {
       {/* Sidebar panel */}
       <aside
         className={`
-          fixed top-16 left-0 bottom-0 w-64 bg-white dark:bg-gray-900 overflow-auto
+          fixed top-16 left-0 bottom-0 w-52 lg:w-64 bg-white dark:bg-gray-900 overflow-auto
           transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}
           transition-transform duration-200 ease-in-out
           sm:translate-x-0
