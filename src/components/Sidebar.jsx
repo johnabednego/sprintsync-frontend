@@ -6,7 +6,7 @@ import {
   FaProjectDiagram,
   FaChartBar,
   FaUsers,
-  FaUser
+  FaTags
 } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -19,7 +19,13 @@ export default function Sidebar({ isOpen, onClose }) {
     { to: '/projects', label: 'Projects',  icon: <FaProjectDiagram /> },
     { to: '/analytics',label: 'Analytics', icon: <FaChartBar /> },
     // only show to admins:
-    ...(user.isAdmin ? [{ to: '/users', label: 'User Management', icon: <FaUsers /> }] : [])
+    ...(user.isAdmin
+      ? [
+          { to: '/users', label: 'User Management', icon: <FaUsers /> },
+          { to: '/tags',  label: 'Tag Management',  icon: <FaTags  /> }
+        ]
+      : []
+    )
   ];
 
   return (

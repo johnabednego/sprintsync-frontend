@@ -4,6 +4,8 @@ import UserManagement from './pages/UserManagement';
 import { useAuth } from './contexts/AuthContext';
 import Projects from './pages/Projects';
 import TaskList from './pages/TaskList';
+import TagManagement from './pages/TagManagement';
+
 
 export default function AppRoutes() {
   const { user } = useAuth();
@@ -16,6 +18,7 @@ export default function AppRoutes() {
       {user.isAdmin && (
         <Route path="/users" element={<UserManagement />} />
       )}
+      {user.isAdmin && <Route path="/tags" element={<TagManagement />} />}
       {/* Redirect any unknown route to home */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
