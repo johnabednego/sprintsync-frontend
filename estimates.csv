@@ -28,8 +28,7 @@ Design & implement “New Tag” modal with form validation (React Hook Form or 
 Implement “Edit Tag reuseable form/modal,0.8,0.2
 
 # --- AI Assist Integration ---
-Add “Get AI Suggestion” button on task form (draftDescription) and dashboard (dailyPlan),0.6,
-Build AI result drawer/popup with loading spinner & styled code block,0.6,
+Add “Get AI Suggestion” button on task form (draftDescription) and dashboard (dailyPlan),0.6,0.3
 
 # --- Comments & Time Entry UI ---
 Create CommentList & CommentForm components (time stamps),0.8,0.3

@@ -1,6 +1,8 @@
+// src/components/TaskDetail.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
+import { FaRobot } from 'react-icons/fa';
 import baseUrl from '../components/baseUrl';
 import { toast } from 'react-toastify';
 import { useProjects } from '../hooks/useProjects';
@@ -10,12 +12,12 @@ import { useTags }     from '../hooks/useTags';
 const STATUSES = ['todo', 'inProgress', 'done'];
 
 export default function TaskDetail({ task, onClose }) {
-  const isNew     = task?.new === true;
-  const projects  = useProjects();
-  const users     = useUsers();
-  const tags      = useTags();
+  const isNew    = task?.new === true;
+  const projects = useProjects();
+  const users    = useUsers();
+  const tags     = useTags();
 
-  // prepare tag dropdown options
+  // Prepare tag-dropdown options
   const tagOptions = tags.map(t => ({
     value: t._id,
     label: t.name,
@@ -28,15 +30,17 @@ export default function TaskDetail({ task, onClose }) {
     project:     '',
     assignedTo:  '',
     status:      STATUSES[0],
-    tags:        []           // array of tag IDs
+    tags:        []          // array of tag IDs
   });
-  const [comments, setComments]      = useState([]);
-  const [minutesToAdd, setMinutes]   = useState('');
-  const [totalMinutes, setTotalMin]  = useState(task.totalMinutes || 0);
-  const [hoursLogged, setHours]      = useState(((task.totalMinutes||0)/60).toFixed(2));
+  const [comments, setComments]    = useState([]);
+  const [minutesToAdd, setMinutes] = useState('');
+  const [totalMinutes, setTotalMin]= useState(task.totalMinutes || 0);
+  const [hoursLogged, setHours]    = useState(((task.totalMinutes||0)/60).toFixed(2));
+  const [aiLoading, setAiLoading]  = useState(false);
 
   useEffect(() => {
     if (!isNew && task) {
+      // populate form from task
       setForm({
         title:       task.title,
         description: task.description,
@@ -51,6 +55,31 @@ export default function TaskDetail({ task, onClose }) {
     }
   }, []);
 
+  /** Auto‑draft description via AI stub */
+  const generateDescription = async () => {
+    if (!form.title.trim()) return toast.error('Enter a title first');
+    setAiLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const { data } = await axios.post(
+        `${baseUrl}/ai/suggest`,
+        { mode: 'draftDescription', payload: { title: form.title } },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (data.ok && data.data.description) {
+        setForm(f => ({ ...f, description: data.data.description }));
+        toast.success('Description generated');
+      } else {
+        toast.error(data.error || 'AI failed to generate');
+      }
+    } catch {
+      toast.error('AI request failed');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  /** Save (create or update) */
   const save = async () => {
     if (!form.project) return toast.error('Please select a project');
     try {
@@ -69,6 +98,7 @@ export default function TaskDetail({ task, onClose }) {
     }
   };
 
+  /** Fetch existing comments */
   const fetchComments = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -82,6 +112,7 @@ export default function TaskDetail({ task, onClose }) {
     }
   };
 
+  /** Add a comment */
   const addComment = async e => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -99,6 +130,7 @@ export default function TaskDetail({ task, onClose }) {
     }
   };
 
+  /** Log time */
   const logTime = async () => {
     const mins = parseInt(minutesToAdd, 10);
     if (isNaN(mins) || mins < 0) {
@@ -122,28 +154,29 @@ export default function TaskDetail({ task, onClose }) {
 
   return (
     <div className="fixed inset-0 flex items-start justify-center z-50 overflow-auto">
+      {/* backdrop */}
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+
+      {/* modal */}
       <div className="relative bg-white dark:bg-gray-800 p-6 rounded shadow-lg w-full max-w-2xl m-4">
         <h2 className="text-xl font-semibold dark:text-gray-100 mb-4">
           {isNew ? 'New Task' : 'Task Details'}
         </h2>
 
-        {/* Form Grid */}
+        {/* Form grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {['title','description'].map(fld => (
-            <div key={fld}>
-              <label className="block mb-1 dark:text-gray-300">
-                {fld.charAt(0).toUpperCase()+fld.slice(1)}
-              </label>
-              <input
-                name={fld}
-                value={form[fld]}
-                onChange={e => setForm(f => ({ ...f, [fld]: e.target.value }))}
-                className="w-full border dark:border-gray-700 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-            </div>
-          ))}
+          {/* Title */}
+          <div>
+            <label className="block mb-1 dark:text-gray-300">Title</label>
+            <input
+              name="title"
+              value={form.title}
+              onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+              className="w-full border dark:border-gray-700 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            />
+          </div>
 
+          {/* Project */}
           <div>
             <label className="block mb-1 dark:text-gray-300">Project</label>
             <select
@@ -159,6 +192,29 @@ export default function TaskDetail({ task, onClose }) {
             </select>
           </div>
 
+          {/* Auto‑draft Description */}
+          <div className="col-span-1 md:col-span-2">
+            <div className="flex justify-between items-center mb-1">
+              <label className="dark:text-gray-300">Description</label>
+              <button
+                onClick={generateDescription}
+                disabled={aiLoading}
+                className="flex items-center space-x-1 text-sm px-2 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded"
+              >
+                <FaRobot />
+                <span>{aiLoading ? 'Generating…' : 'Auto‑draft'}</span>
+              </button>
+            </div>
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+              rows={4}
+              className="w-full border dark:border-gray-700 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            />
+          </div>
+
+          {/* Assign To */}
           <div>
             <label className="block mb-1 dark:text-gray-300">Assign To</label>
             <select
@@ -176,6 +232,7 @@ export default function TaskDetail({ task, onClose }) {
             </select>
           </div>
 
+          {/* Status (only when editing) */}
           {!isNew && (
             <div>
               <label className="block mb-1 dark:text-gray-300">Status</label>
@@ -258,6 +315,24 @@ export default function TaskDetail({ task, onClose }) {
           </button>
         </div>
 
+        {/* Tags preview (read‑only) */}
+        {!isNew && (
+          <div className="mt-6">
+            <h4 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Tags</h4>
+            <div className="flex flex-wrap gap-1">
+              {task.tags.map(tag => (
+                <span
+                  key={tag._id}
+                  className="text-sm px-2 py-1 rounded"
+                  style={{ backgroundColor: tag.color }}
+                >
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Comments */}
         {!isNew && (
           <section className="mt-8">
@@ -267,7 +342,8 @@ export default function TaskDetail({ task, onClose }) {
                 <li key={c._id} className="bg-gray-100 dark:bg-gray-700 p-2 rounded">
                   <p className="text-sm text-gray-700 dark:text-gray-200">{c.text}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    — {c.author.firstName} {c.author.lastName}, {new Date(c.createdAt).toLocaleString()}
+                    — {c.author.firstName} {c.author.lastName},{' '}
+                    {new Date(c.createdAt).toLocaleString()}
                   </p>
                 </li>
               ))}
