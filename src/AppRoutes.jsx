@@ -6,6 +6,7 @@ import Projects from './pages/Projects';
 import TaskList from './pages/TaskList';
 import TagManagement from './pages/TagManagement';
 import TimeEntryList from './pages/TimeEntry/TimeEntryList';
+import Dashboard from './pages/Dashboard';
 
 
 export default function AppRoutes() {
@@ -13,9 +14,10 @@ export default function AppRoutes() {
 
   return (
     <Routes>
+       <Route index element={<Dashboard />} />
       <Route path="/tasks" element={<TaskList />} />
       <Route path="/projects" element={<Projects />} />
-      <Route path="//time-entries" element={<TimeEntryList />} />
+      <Route path="/time-entries" element={<TimeEntryList />} />
       <Route path="/profile" element={<Profile />} />
       {user.isAdmin && (
         <Route path="/users" element={<UserManagement />} />
