@@ -14,10 +14,10 @@ Dark Mode,0.5,0.2
 CRUD Operation on projects, 1.5, 1.0
 
 # --- Task List & Details View ---
-Fetch & display task list with inline status toggles (pill buttons with gradients),1.2,
-Implement “Task Card” component (title, tags, time logged, status badge),1.0,
-Add filtering by status/project/tag,0.8,
-Build Task Detail page/modal (full description, time entries, comments section),1.5,
+Fetch & display task list with inline status toggles (pill buttons with gradients),1.2,0.7
+Implement “Task Card” component (title; tags; time logged; status badge),1.0,0.4
+Add filtering by status/project/tag,0.8,0.3
+Build Task Detail page/modal (full description; time entries; comments section),1.5,0.5
 
 # --- Create/Edit Task UI ---
 Design & implement “New Task” modal with form validation (React Hook Form or Formik),1.0,2.0
@@ -32,17 +32,16 @@ Add “Get AI Suggestion” button on task form (draftDescription) and dashboard
 Build AI result drawer/popup with loading spinner & styled code block,0.6,
 
 # --- Comments & Time Entry UI ---
-Create CommentList & CommentForm components (with avatar, time stamps),0.8,
-Implement TimeEntry form (start/end pickers, notes) and list with duration display,1.0,
+Create CommentList & CommentForm components (time stamps),0.8,0.3
+Implement TimeEntry form (start/end pickers; notes) and list with duration display,1.0,0.5
 
 # --- Responsive & Premium Styling ---
-Define global gradient palette and CSS variables,0.5,
-Add animations/transitions (hover effects, modals, loading states),0.8,
-Ensure full mobile/tablet responsiveness,1.0,
+Define global gradient palette and CSS variables,0.5,0.1
+Add animations/transitions (hover effects; modals; loading states),0.8,0.6
+Ensure full mobile/tablet responsiveness,1.0,1.2
 
-# --- Observability & Devops Hooks ---
-Integrate Axios interceptors to log API calls (method, path, userId, latency),0.5,
-Wire up Sentry or LogRocket for error reporting (optional stretch),0.8,
+# --- Observability  ---
+Integrate Axios interceptors to log API calls (method; path; userId; latency),0.5,0.5
 
 # --- Charts & Stretch Features (optional) ---
 Implement analytics chart (time logged per day per user) with Chart.js or Recharts,1.2,
@@ -54,5 +53,5 @@ End‑to‑end flow test (Cypress) for login → task CRUD → AI assist,1.2,
 
 # --- Documentation & Deployment ---
 Update README with frontend setup & scripts,0.4,
-Deploy to Vercel (or Netlify) with environment variables,0.3,
+Deploy to Vercel with environment variables,0.3,0.2
 Record a short Loom clip demoing the frontend,0.6,
