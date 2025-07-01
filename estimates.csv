@@ -20,8 +20,12 @@ Add filtering by status/project/tag,0.8,
 Build Task Detail page/modal (full description, time entries, comments section),1.5,
 
 # --- Create/Edit Task UI ---
-Design & implement “New Task” modal with form validation (React Hook Form or Formik),1.0,
-Implement “Edit Task” reuseable form/modal,0.8,
+Design & implement “New Task” modal with form validation (React Hook Form or Formik),1.0,2.0
+Implement “Edit Task” reuseable form/modal,0.8,0.5
+
+# --- Create/Edit Tag UI ---
+Design & implement “New Tag” modal with form validation (React Hook Form or Formik),1.0,0.3
+Implement “Edit Tag reuseable form/modal,0.8,0.2
 
 # --- AI Assist Integration ---
 Add “Get AI Suggestion” button on task form (draftDescription) and dashboard (dailyPlan),0.6,
