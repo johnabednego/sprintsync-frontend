@@ -6,7 +6,8 @@ import {
   FaProjectDiagram,
   FaChartBar,
   FaUsers,
-  FaTags
+  FaTags,
+  FaRegClock 
 } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -18,6 +19,7 @@ export default function Sidebar({ isOpen, onClose }) {
     { to: '/tasks',    label: 'Tasks',     icon: <FaTasks /> },
     { to: '/projects', label: 'Projects',  icon: <FaProjectDiagram /> },
     { to: '/analytics',label: 'Analytics', icon: <FaChartBar /> },
+    { to: '/time-entries', label: 'Time Entries', icon: <FaRegClock /> },
     // only show to admins:
     ...(user.isAdmin
       ? [
@@ -33,7 +35,7 @@ export default function Sidebar({ isOpen, onClose }) {
       {/* Backdrop on mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-20 sm:hidden"
+          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
           onClick={onClose}
         />
       )}
@@ -44,7 +46,7 @@ export default function Sidebar({ isOpen, onClose }) {
           fixed top-16 left-0 bottom-0 w-52 lg:w-64 bg-white dark:bg-gray-900 overflow-auto
           transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}
           transition-transform duration-200 ease-in-out
-          sm:translate-x-0
+          lg:translate-x-0
         `}
         style={{ zIndex: 30 }}
       >
