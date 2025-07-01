@@ -33,7 +33,7 @@ export default function Navbar({ onToggleSidebar }) {
       <div className="flex items-center space-x-4">
         <button
           onClick={onToggleSidebar}
-          className="block sm:hidden p-2 bg-white/20 rounded hover:bg-white/30 transition z-50"
+          className="block lg:hidden p-2 bg-white/20 rounded hover:bg-white/30 transition z-50"
         >
           <FaBars />
         </button>
