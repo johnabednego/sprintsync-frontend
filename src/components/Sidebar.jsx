@@ -7,7 +7,8 @@ import {
   FaChartBar,
   FaUsers,
   FaTags,
-  FaRegClock 
+  FaRegClock,
+  FaClipboardList
 } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -15,19 +16,19 @@ export default function Sidebar({ isOpen, onClose }) {
   const { user } = useAuth();
 
   const nav = [
-    { to: '/',         label: 'Dashboard', icon: <FaTachometerAlt /> },
-    { to: '/tasks',    label: 'Tasks',     icon: <FaTasks /> },
-    { to: '/projects', label: 'Projects',  icon: <FaProjectDiagram /> },
-    { to: '/analytics',label: 'Analytics', icon: <FaChartBar /> },
+    { to: '/', label: 'Dashboard', icon: <FaTachometerAlt /> },
+    { to: '/tasks', label: 'Tasks', icon: <FaTasks /> },
+    { to: '/projects', label: 'Projects', icon: <FaProjectDiagram /> },
+    { to: '/analytics', label: 'Analytics', icon: <FaChartBar /> },
     { to: '/time-entries', label: 'Time Entries', icon: <FaRegClock /> },
     // only show to admins:
     ...(user.isAdmin
       ? [
-          { to: '/users', label: 'User Management', icon: <FaUsers /> },
-          { to: '/tags',  label: 'Tag Management',  icon: <FaTags  /> }
-        ]
-      : []
-    )
+        { to: '/users', label: 'User Management', icon: <FaUsers /> },
+        { to: '/tags', label: 'Tag Management', icon: <FaTags /> },
+        { to: '/audit-logs', label: 'Audit Logs', icon: <FaClipboardList /> }
+      ]
+      : [])
   ];
 
   return (
@@ -57,10 +58,9 @@ export default function Sidebar({ isOpen, onClose }) {
               to={to}
               end
               className={({ isActive }) =>
-                `flex items-center px-4 py-3 mx-2 rounded-lg ${
-                  isActive
-                    ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                `flex items-center px-4 py-3 mx-2 rounded-lg ${isActive
+                  ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                 }`
               }
               onClick={onClose}
