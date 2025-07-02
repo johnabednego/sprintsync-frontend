@@ -52,4 +52,4 @@ A time‑per‑day per user chart, 1.0, 1.3
 # --- Documentation & Deployment ---
 Update README with frontend setup & scripts,0.4,0.2
 Deploy to Vercel with environment variables,0.3,0.2
-Record a short Loom clip demoing the frontend,0.6,
+Record a short clip demoing the frontend,0.6,0.1
